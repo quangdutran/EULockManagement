@@ -8,6 +8,6 @@ import lombok.Data;
 @Data
 @Builder
 public class PassCodeResponse {
-    private String keyboardPwd;
-    private String keyboardPwdId;
+  private String keyboardPwd;
+  private String keyboardPwdId;
 }

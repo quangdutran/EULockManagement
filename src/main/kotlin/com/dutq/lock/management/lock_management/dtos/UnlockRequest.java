@@ -8,8 +8,8 @@ import lombok.Data;
 @Data
 @Builder
 public class UnlockRequest {
-    private String clientId;
-    private String accessToken;
-    private int lockId;
-    private long date;
+  private String clientId;
+  private String accessToken;
+  private int lockId;
+  private long date;
 }

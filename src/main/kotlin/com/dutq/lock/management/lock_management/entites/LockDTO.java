@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 public class LockDTO {
-    private String lockId;
-    private String lockAlias;
-    private int electricQuantity;
+  private String lockId;
+  private String lockAlias;
+  private int electricQuantity;
 }

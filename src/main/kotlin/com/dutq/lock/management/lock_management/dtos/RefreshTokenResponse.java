@@ -8,10 +8,10 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RefreshTokenResponse {
-    private String access_token;
-    private String refresh_token;
-    private int expires_in;
-    private long openid;
-    private String scope;
-    private String token_type;
+  private String access_token;
+  private String refresh_token;
+  private int expires_in;
+  private long openid;
+  private String scope;
+  private String token_type;
 }

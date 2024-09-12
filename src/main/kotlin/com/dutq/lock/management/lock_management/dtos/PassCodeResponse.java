@@ -8,6 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PassCodeResponse {
-    private String keyboardPwd;
-    private int keyboardPwdId;
+  private String keyboardPwd;
+  private int keyboardPwdId;
 }

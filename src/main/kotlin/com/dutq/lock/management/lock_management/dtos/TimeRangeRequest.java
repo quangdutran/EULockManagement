@@ -1,10 +1,8 @@
 package com.dutq.lock.management.lock_management.dtos;
 
-import com.dutq.lock.management.lock_management.annotation.DateRangeValid;
 import com.dutq.lock.management.lock_management.annotation.GenericTimeRangeValid;
-import lombok.*;
-
 import java.time.LocalDateTime;
+import lombok.*;
 
 @Data
 @Getter
@@ -13,6 +11,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @GenericTimeRangeValid
 public class TimeRangeRequest {
-    private LocalDateTime from;
-    private LocalDateTime to;
+  private LocalDateTime from;
+  private LocalDateTime to;
 }

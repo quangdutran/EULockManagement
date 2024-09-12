@@ -15,22 +15,28 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final UserAuthenticationEntryPoint userAuthenticationEntryPoint;
-    private final UserAuthenticationProvider userAuthenticationProvider;
+  private final UserAuthenticationEntryPoint userAuthenticationEntryPoint;
+  private final UserAuthenticationProvider userAuthenticationProvider;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .exceptionHandling().authenticationEntryPoint(userAuthenticationEntryPoint)
-                .and()
-                .addFilterBefore(new JwtAuthFilter(userAuthenticationProvider), BasicAuthenticationFilter.class)
-                .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers(HttpMethod.POST, "/api/login", "/").permitAll()
-                        .anyRequest().authenticated())
-        ;
-        return http.build();
-    }
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http.exceptionHandling()
+        .authenticationEntryPoint(userAuthenticationEntryPoint)
+        .and()
+        .addFilterBefore(
+            new JwtAuthFilter(userAuthenticationProvider), BasicAuthenticationFilter.class)
+        .csrf()
+        .disable()
+        .sessionManagement()
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()
+        .authorizeHttpRequests(
+            (requests) ->
+                requests
+                    .requestMatchers(HttpMethod.POST, "/api/login", "/")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated());
+    return http.build();
+  }
 }

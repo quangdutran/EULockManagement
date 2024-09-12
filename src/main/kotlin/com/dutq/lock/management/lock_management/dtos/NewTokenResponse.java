@@ -7,5 +7,5 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NewTokenResponse extends RefreshTokenResponse {
-    private int uid;
+  private int uid;
 }

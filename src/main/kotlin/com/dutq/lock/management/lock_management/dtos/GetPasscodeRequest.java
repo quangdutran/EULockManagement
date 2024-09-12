@@ -7,15 +7,13 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 @Builder
-public
-class GetPasscodeRequest {
-    private String clientId;
-    private String accessToken;
-    private String keyboardPwdName;
-    private int keyboardPwdType;
-    private int lockId;
-    private long date;
-    private long startDate;
-    private long endDate;
-
+public class GetPasscodeRequest {
+  private String clientId;
+  private String accessToken;
+  private String keyboardPwdName;
+  private int keyboardPwdType;
+  private int lockId;
+  private long date;
+  private long startDate;
+  private long endDate;
 }

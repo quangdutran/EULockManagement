@@ -10,7 +10,7 @@ import lombok.*;
 @Getter
 @ToString
 public class ErrorResponse {
-    private int errcode;
-    private String errmsg;
-    private String description;
+  private int errcode;
+  private String errmsg;
+  private String description;
 }

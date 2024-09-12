@@ -7,5 +7,4 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @EnableJpaRepositories
 @EnableJpaAuditing
-public class PersistenceConfig {
-}
+public class PersistenceConfig {}

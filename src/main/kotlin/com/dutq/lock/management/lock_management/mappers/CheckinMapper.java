@@ -7,7 +7,7 @@ import org.mapstruct.Mapping;
 
 @Mapper
 public interface CheckinMapper {
-    @Mapping(source = "checkoutTime", target = "expectedCheckoutTime")
-    @Mapping(source = "customerEmail", target = "customerEmail")
-    Stay checkinRequestToStay(CheckinRequest request);
+  @Mapping(source = "checkoutTime", target = "expectedCheckoutTime")
+  @Mapping(source = "customerEmail", target = "customerEmail")
+  Stay checkinRequestToStay(CheckinRequest request);
 }
