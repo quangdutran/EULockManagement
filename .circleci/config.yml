@@ -43,7 +43,7 @@ jobs:
     steps:
       - checkout
       - run:
-          command: ls ~/project/
+          command: ls ~/project/src/main/resources/application-secret.properties
       - run:
           name: Calculate cache key
           command: |-
