@@ -161,6 +161,14 @@
 						<googleJavaFormat />
 					</java>
 				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>apply</goal>
+						</goals>
+						<phase>prepare-package</phase>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
