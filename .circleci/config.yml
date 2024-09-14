@@ -14,9 +14,9 @@ jobs:
       - node/install-packages:
           pkg-manager: npm
       - run:
-          command:
-            - unset CI
-            - npm run build
+          command: |
+            unset CI
+            npm run build
       - run:
           name: Create the ~/artifacts directory if it doesn't exist
           command: mkdir -p ~/artifacts
