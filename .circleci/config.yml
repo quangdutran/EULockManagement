@@ -17,16 +17,6 @@ jobs:
           command: |
             unset CI
             npm run build
-      - run:
-          name: Create the ~/artifacts directory if it doesn't exist
-          command: mkdir -p ~/artifacts
-      # Copy output to artifacts dir
-      - run:
-          name: Copy artifacts
-          command: cp -R build dist public .output .next .docusaurus ~/artifacts 2>/dev/null || true
-      - store_artifacts:
-          path: ~/artifacts
-          destination: node-build
   test-java:
     docker:
       - image: cimg/openjdk:17.0
@@ -49,20 +39,33 @@ jobs:
           key: cache-{{ checksum "/tmp/CIRCLECI_CACHE_KEY" }}
           paths:
             - ~/.m2/repository
-  deploy:
-    # This is an example deploy job, not actually used by the workflow
+  dockerize:
     docker:
-      - image: cimg/base:stable
+      - image: circleci/docker:stable
     steps:
-      # Replace this with steps to deploy to users
+      - setup_remote_docker
+      - checkout
       - run:
-          name: deploy
-          command: '#e.g. ./deploy.sh'
+          name: Build Backend Docker Image
+          command: docker build -t quangdutran809/lock-management-be ./
+      - run:
+          name: Build Frontend Docker Image
+          command: docker build -t quangdutran809/lock-management-fe ./frontend
+      - run:
+          name: Login to DockerHub
+          command: echo "DOCKER_PASSWORD" | docker login -u "DOCKER_USERNAME" --password-stdin
+      - run:
+          name: Push Backend Image
+          command: docker push quangdutran809/lock-management-be
+      - run:
+          name: Push Frontend Image
+          command: docker push quangdutran809/lock-management-fe
 workflows:
   build-and-test:
     jobs:
       - build-node
       - test-java
-    # - deploy:
-    #     requires:
-    #       - build-node
+      - dockerize:
+         requires:
+           - build-node
+           - test-java
