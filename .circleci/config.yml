@@ -49,6 +49,8 @@ jobs:
     steps:
       - setup_remote_docker
       - checkout
+      - attach_workspace:
+          at: ~/project
       - run:
           name: Build Backend Docker Image
           command: docker build -t quangdutran809/lock-management-be ./
@@ -57,7 +59,7 @@ jobs:
           command: docker build -t quangdutran809/lock-management-fe ./frontend
       - run:
           name: Login to DockerHub
-          command: echo "DOCKER_PASSWORD" | docker login -u "DOCKER_USERNAME" --password-stdin
+          command: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
       - run:
           name: Push Backend Image
           command: docker push quangdutran809/lock-management-be
