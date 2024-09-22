@@ -41,7 +41,7 @@ jobs:
             - ~/.m2/repository
   dockerize:
     docker:
-      - image: circleci/docker:stable
+      - image: cimg/base:current
     steps:
       - setup_remote_docker
       - checkout
