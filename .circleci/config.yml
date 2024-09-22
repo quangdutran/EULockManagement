@@ -39,6 +39,10 @@ jobs:
           key: cache-{{ checksum "/tmp/CIRCLECI_CACHE_KEY" }}
           paths:
             - ~/.m2/repository
+      - persist_to_workspace:
+          root: .
+          paths:
+            - target/*.jar
   dockerize:
     docker:
       - image: cimg/base:current
