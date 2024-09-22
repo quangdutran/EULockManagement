@@ -1,8 +1,20 @@
-FROM openjdk:17-jdk-slim
-WORKDIR /app
+# Custom Java runtime using jlink in a multi-stage container build
+FROM eclipse-temurin:17 as jre-build
 
-COPY target/*.jar app.jar
+# Create a custom Java runtime
+RUN $JAVA_HOME/bin/jlink \
+         --add-modules jdk.unsupported,java.base,java.sql,java.naming,java.desktop,java.management,java.security.jgss,java.instrument \
+         --strip-debug \
+         --no-man-pages \
+         --no-header-files \
+         --compress=2 \
+         --output /javaruntime
 
-EXPOSE 8080
+FROM debian:stretch-slim
+ENV JAVA_HOME=/opt/java/openjdk
+ENV PATH "${JAVA_HOME}/bin:${PATH}"
+COPY --from=jre-build /javaruntime $JAVA_HOME
 
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+RUN mkdir /opt/app
+COPY target/*.jar /opt/app/app.jar
+CMD ["java", "-jar", "/opt/app/app.jar"]
