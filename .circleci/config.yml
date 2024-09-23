@@ -53,10 +53,10 @@ jobs:
           at: ~/project
       - run:
           name: Build Backend Docker Image
-          command: docker build -t lock-management-be ./
+          command: docker build -t ghcr.io/quangdutran/lock-management-be ./
       - run:
           name: Build Frontend Docker Image
-          command: docker build -t lock-management-fe ./frontend
+          command: docker build -t ghcr.io/quangdutran/lock-management-fe ./frontend
       - run:
           name: Login to DockerHub
           command: echo $GITHUB_CR_TOKEN | docker login ghcr.io -u $GITHUB_CR_USER --password-stdin
