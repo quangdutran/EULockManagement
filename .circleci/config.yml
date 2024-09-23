@@ -23,7 +23,20 @@ jobs:
     steps:
       - checkout
       - run:
-          command: touch ~/project/src/main/resources/application-secret.properties
+          name: Create application secret
+          command: |
+            touch ~/project/src/main/resources/application-secret.properties
+            echo "eu.api.client.id=${EU_CLIENT_ID}" >> ~/project/src/main/resources/application-secret.properties
+            echo "eu.api.client.secret=${EU_CLIENT_SECRET}" >> ~/project/src/main/resources/application-secret.properties
+            echo "eu.api.client.username=${EU_CLIENT_USERNAME}" >> ~/project/src/main/resources/application-secret.properties
+            echo "eu.api.refresh.password=${EU_REFRESH_PASSWORD}" >> ~/project/src/main/resources/application-secret.properties
+            echo "eu.api.base.url=${EU_API_BASE_URL}" >> ~/project/src/main/resources/application-secret.properties
+            echo "eu.api.base.url.v3=${EU_API_BASE_URL_V3}" >> ~/project/src/main/resources/application-secret.properties
+            echo "security.jwt.token.secret-key=${JWT_SECRET_KEY}" >> ~/project/src/main/resources/application-secret.properties
+            echo "spring.datasource.username=${DB_USERNAME}" >> ~/project/src/main/resources/application-secret.properties
+            echo "spring.datasource.password=${DB_PASSWORD}" >> ~/project/src/main/resources/application-secret.properties
+            echo "cors.allowed.origins=${CORS_ORIGIN}" >> ~/project/src/main/resources/application-secret.properties
+            echo "github.container.registry.token=${GITHUB_CR_TOKEN}" >> ~/project/src/main/resources/application-secret.properties
       - run:
           name: Calculate cache key
           command: |-
