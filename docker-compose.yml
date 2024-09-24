@@ -2,14 +2,14 @@ version: '3.8'
 
 services:
   frontend:
-    build: ./frontend
+    image: ghcr.io/quangdutran/lock-management-fe:latest
     ports:
-      - "3000:3000"
+      - "3000:80"
     depends_on:
       - backend
 
   backend:
-    build: ./
+    image: ghcr.io/quangdutran/lock-management-be:latest
     ports:
       - "8080:8080"
     environment:
@@ -32,3 +32,8 @@ services:
 
 volumes:
   postgres_data:
+
+x-credentials:
+  github:
+    username: ${GITHUB_USERNAME}
+    token: ${GITHUB_TOKEN}

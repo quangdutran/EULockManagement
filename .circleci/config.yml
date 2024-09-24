@@ -1,11 +1,9 @@
-# This config was automatically generated from your source code
 # Stacks detected: deps:java:.,deps:node:frontend
 version: 2.1
 orbs:
   node: circleci/node@5
 jobs:
   build-node:
-    # Build node project
     executor: node/default
     working_directory: ~/project/frontend
     steps:
@@ -17,23 +15,26 @@ jobs:
           command: |
             unset CI
             npm run build
-      - run:
-          name: Create the ~/artifacts directory if it doesn't exist
-          command: mkdir -p ~/artifacts
-      # Copy output to artifacts dir
-      - run:
-          name: Copy artifacts
-          command: cp -R build dist public .output .next .docusaurus ~/artifacts 2>/dev/null || true
-      - store_artifacts:
-          path: ~/artifacts
-          destination: node-build
   test-java:
     docker:
       - image: cimg/openjdk:17.0
     steps:
       - checkout
       - run:
-          command: touch ~/project/src/main/resources/application-secret.properties
+          name: Create application secret
+          command: |
+            touch ~/project/src/main/resources/application-secret.properties
+            echo "eu.api.client.id=${EU_CLIENT_ID}" >> ~/project/src/main/resources/application-secret.properties
+            echo "eu.api.client.secret=${EU_CLIENT_SECRET}" >> ~/project/src/main/resources/application-secret.properties
+            echo "eu.api.client.username=${EU_CLIENT_USERNAME}" >> ~/project/src/main/resources/application-secret.properties
+            echo "eu.api.refresh.password=${EU_REFRESH_PASSWORD}" >> ~/project/src/main/resources/application-secret.properties
+            echo "eu.api.base.url=${EU_API_BASE_URL}" >> ~/project/src/main/resources/application-secret.properties
+            echo "eu.api.base.url.v3=${EU_API_BASE_URL_V3}" >> ~/project/src/main/resources/application-secret.properties
+            echo "security.jwt.token.secret-key=${JWT_SECRET_KEY}" >> ~/project/src/main/resources/application-secret.properties
+            echo "spring.datasource.username=${DB_USERNAME}" >> ~/project/src/main/resources/application-secret.properties
+            echo "spring.datasource.password=${DB_PASSWORD}" >> ~/project/src/main/resources/application-secret.properties
+            echo "cors.allowed.origins=${CORS_ORIGIN}" >> ~/project/src/main/resources/application-secret.properties
+            echo "github.container.registry.token=${GITHUB_CR_TOKEN}" >> ~/project/src/main/resources/application-secret.properties
       - run:
           name: Calculate cache key
           command: |-
@@ -49,20 +50,43 @@ jobs:
           key: cache-{{ checksum "/tmp/CIRCLECI_CACHE_KEY" }}
           paths:
             - ~/.m2/repository
-  deploy:
-    # This is an example deploy job, not actually used by the workflow
+      - persist_to_workspace:
+          root: .
+          paths:
+            - target/*.jar
+  dockerize:
     docker:
-      - image: cimg/base:stable
+      - image: cimg/base:current
     steps:
-      # Replace this with steps to deploy to users
+      - setup_remote_docker
+      - checkout
+      - attach_workspace:
+          at: ~/project
       - run:
-          name: deploy
-          command: '#e.g. ./deploy.sh'
+          name: Build Backend Docker Image
+          command: docker build -t ghcr.io/quangdutran/lock-management-be ./
+      - run:
+          name: Build Frontend Docker Image
+          command: docker build -t ghcr.io/quangdutran/lock-management-fe ./frontend
+      - run:
+          name: Login to DockerHub
+          command: echo $GITHUB_CR_TOKEN | docker login ghcr.io -u $GITHUB_CR_USER --password-stdin
+      - run:
+          name: Push Backend Image
+          command: docker push ghcr.io/quangdutran/lock-management-be:latest
+      - run:
+          name: Push Frontend Image
+          command: docker push ghcr.io/quangdutran/lock-management-fe:latest
 workflows:
   build-and-test:
     jobs:
       - build-node
       - test-java
-    # - deploy:
-    #     requires:
-    #       - build-node
+      - dockerize:
+         requires:
+           - build-node
+           - test-java
+         filters:
+          branches:
+            only:
+              - main
