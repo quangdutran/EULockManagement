@@ -1,11 +1,9 @@
-# This config was automatically generated from your source code
 # Stacks detected: deps:java:.,deps:node:frontend
 version: 2.1
 orbs:
   node: circleci/node@5
 jobs:
   build-node:
-    # Build node project
     executor: node/default
     working_directory: ~/project/frontend
     steps:
@@ -88,3 +86,7 @@ workflows:
          requires:
            - build-node
            - test-java
+         filters:
+          branches:
+            only:
+              - main
